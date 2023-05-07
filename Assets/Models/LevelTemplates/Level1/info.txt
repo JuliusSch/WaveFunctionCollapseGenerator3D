@@ -1,0 +1,8 @@
+template size x:13
+template size y:9
+template size z:8
+tile size x:5
+tile size y:5
+tile size z:3
+4 ways symmetric:Wall,Intersection,ArchIntersection,Spire,Base,Air
+2 ways symmetric:Path,Railings,SmallRoof
