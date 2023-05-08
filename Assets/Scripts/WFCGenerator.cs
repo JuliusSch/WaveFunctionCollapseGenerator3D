@@ -2,24 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Unity.Collections;
-using Unity.Jobs;
 using UnityEngine;
 using static Module;
 using static PatternGenerator;
 using Random = System.Random;
-using ReadOnlyAttribute = Unity.Collections.ReadOnlyAttribute;
 
 public class WFCGenerator : MonoBehaviour
 {
-    Dictionary<Pattern1x2, int> _patterns;
-    Pattern1x2[] _patternsArray;
+    private Dictionary<Pattern1x2, int> _patterns;
+    private Pattern1x2[] _patternsArray;
+    private Dictionary<string, string> _info;
 
-    Dictionary<Vector3Int, List<int>> _patternsByRelPos;
+    private Dictionary<Vector3Int, List<int>> _patternsByRelPos;
 
-    bool[,,][] _tileWaveforms;
-    bool[,,][] _permissibleModules;
-    private Vector3Int _tileSize = new(5, 3, 5);
+    private bool[,,][] _tileWaveforms;
+    private bool[,,][] _permissibleModules;
+    private Vector3Int _tileSize;
     private List<Module> Modules;
     private int modulesCount;
 
@@ -41,6 +39,9 @@ public class WFCGenerator : MonoBehaviour
 
     void Start()
     {
+        ReadInfoFromFile();
+        _tileSize = new(int.Parse(_info["tile size x"]), int.Parse(_info["tile size z"]), int.Parse(_info["tile size y"]));
+
         ReadPatternsFromFile();
         ReadModulesFromFile();
         GenerateLevel();
@@ -96,6 +97,19 @@ public class WFCGenerator : MonoBehaviour
             { Vector3Int.back + Vector3Int.left, _patterns.Where(p => p.Key.pointBPos == Vector3Int.back + Vector3Int.left).Select(p => Array.IndexOf(_patternsArray, p.Key)).ToList() },
             { Vector3Int.back + Vector3Int.right, _patterns.Where(p => p.Key.pointBPos == Vector3Int.back + Vector3Int.right).Select(p => Array.IndexOf(_patternsArray, p.Key)).ToList() }
         };
+    }
+
+    private void ReadInfoFromFile()
+    {
+        _info = new();
+        string line;
+
+        using StreamReader sr = new(Application.dataPath + "/Models/LevelTemplates/" + TemplateFolderName + "/info.txt");
+        while ((line = sr.ReadLine()) != null)
+        {
+            string[] parts = line.Split(":");
+            _info.Add(parts[0], parts[1]);
+        }
     }
 
     private void ReadModulesFromFile()
