@@ -248,7 +248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55d68a471c3053c409f4d4831cb69987, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LevelSize: {x: 9, y: 5, z: 9}
+  LevelSize: {x: 15, y: 5, z: 15}
   TemplateFolderName: Level1
   Models:
   - {fileID: 919132149155446097, guid: 84ebfccf7414dba4f82696abec496fa6, type: 3}
